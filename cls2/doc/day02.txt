@@ -1,0 +1,368 @@
+# day02
+
+1. 서블릿 등록
+	
+	JSP 프로젝트에서 서블릿 등록은 
+		톰캣이 가지고 있는 wb.xml을 이용하던지
+		아니면 프로젝트 내부의 /webContent/WEB-INF/web.xml
+		에 등록을 했었다.
+		
+		이때 두 방법의 차이점은 
+			톰캣의 설정파일을 사용하는 경우는
+			서버안에 있는 모든 프로젝트에 대해서 적용이 되는 설정이고
+			프로젝트 내부의 설정파일(web.xml)에 정의하는 경우는
+			프로젝트에 한정해서 적용되는 설정이다.
+			
+		스프링 역시 서버의 설정파일은 서버에서 사용하는 전역 설정이고
+		프로젝트에 한정해서 적용시킬 설정파일은 
+			/webapp/WEB-INF/web.xml
+		에서 처리하면 된다.
+		
+		이때 두 설정파일이 처리되는 순서는
+		톰캣 서버의 web.xml 파일을 읽어서 먼저 처리하고
+		이후 프로젝트의 /webapp./WEB-INF/web.xml 파일을 읽어서 처리한다.
+		
+	등록 방법 ]
+		
+		1. 서블릿을 등록하고
+			
+			<servlet>
+				<servlet-name>appServlet</servlet-name>
+					==> 서블릿에 부여하는 이름(개발자가 정하면 된다.)
+				<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+					==> 사용할 서블릿 클래스 이름
+						JSP 프로젝트에서는 이 서블릿 클래스를 직접 만들어서 등록했다.
+						스프링에서는 미리 만들어진 서블릿을 사용하게 된다.
+				<init-param>
+					<param-name>contextConfigLocation</param-name>
+					<param-value>/WEB-INF/spring/appServlet/servelt-context.xml</param-value>
+						==> 지정한 서블릿 클래스의 환경 설정을 담당할 xml 파일을 지정하는 부분...
+							이때 파일 이름은 개발자가 정해도 된다.
+							단, 반드시 해당 위치에 파일이 존재해야 한다.
+				</init-param>
+				<load-on-startup>1</load-on-startup>
+					==> 서블릿이 작동할 우선순위를 지정하는 태그...
+			</servlet>
+			
+			참고 ]
+				하나의 스프링에 서블릿은 여러개 만들 수 있다.
+				그리고 각각의 서블릿은 각각 다른 요청을 처리하도록 할 수 있다.
+				
+				예를 들어
+				유저용 서블릿, 관리자용 서블릿을 따로 만들어서 
+				각각이 다른 요청을 처리하도록 할 수 있다.
+				
+				하지만 이때는 서블릿 이름과 환경 설정파일의 이름을 
+				각각 다르게 해야 한다.
+				
+		2. URL 패턴을 지정한다.
+			==> 등록된 서블릿이 어떤 요청을 받았을때 실행할지를 지정하는 부분....
+				
+				이 작업은 서블릿 등록과 반드시 한 싸으로 만들어져야 한다.
+				
+					
+					<servelt-mapping>
+						<servlet-name>appServlet</servlet-name>
+							==> 패턴을 적용시킬 서블릿 이름
+								이 서블릿이름은 서블릿 등록시 기술했던 이름을 써야한다.
+								
+						<url-pattern>/</url-pattern>
+							==> url 패턴
+					</servlet-mapping>
+					
+		참고 ]
+			
+			기타 태그의 의미
+				
+				<context-param>
+					<param-name>contextConfigLocation</param-name>
+					<param-value>/WEB-INF/spring/root-context.xml</param-value>
+				</context-param>
+				
+				==> web.xml 파일에서 프로젝트의 환경설정을 기술하는데
+					이때 내용이 길어지거나 혹은 다른 기능을 작성하는 경우
+					코드를 구분해줘야할 경우는 보조 설정파일을 만들어서 적용시켜준다.
+					우리의 경우는 DataBase 설정과 bean 처리설정을 할 예정이다.
+					
+					
+				<listener>
+					<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+				</listener>
+					==> 필터 처리를 하기 위해서 필터 분석 도구를 등록하는 부분
+						스프링에서 강력하게 요청하는 기능이 몇가지 있는데
+						그 기능을 처리하기 위해서 필요한 분석 도구를 등록하는 부분...
+						
+=============================================================================================================
+
+컨트롤러 제작
+==> 스프링은 요청에 따라 컨트롤러를 제작하는 것이 아니고
+	요청에 따라서 컨트롤러 내부에 함수를 추가할 뿐이다.
+	
+	따라서 컨트롤러의 갯수는 몇개가 되어도 상관이 없다.
+	
+	하지만 환경 설정 파일에 등록된 위치를 기본 베이스로 해서
+	그 하위에 만들어주면 된다.
+	
+	만약
+		
+		나는 지금 만들 컨트롤러를
+			
+			com.increpas.sample.Day0518.java
+			의 형태로 만들고 싶다.
+			
+		참고 
+			베이스 패키지만 지키면 그 하위에 몇단계가 되던지 관계가 없다.
+			
+	*****
+	중요 ]
+		스프링은 요청을 함수 단위로 등록해서 처리하게 된다.
+		즉, 각각의 함수가 언제 실행될지(어떤 요청이 왔을 때 실행될지)를 
+		지정해 줌 으로써 함수 단위로 요청을 처리하도록 제작된다.
+		
+		따라서 함수를 제작할 때 이 함수가 어떤 요청이 왔을 때 실행될지를 지정해 줘야 한다.
+		
+		지정방법 ]
+			
+			@RequestMapping()
+			
+		형식 ]
+			***
+			1. 하나의 요청을 처리하는 방법
+				
+				@RequestMapping("/요청내용")
+					또는
+				@RequestMapping(path="/요청내용")
+					또는
+				@RequestMapping(value="/요청내용")
+				
+				예 ]
+					@RequestMapping("/hello.cls")
+					<== http://localhost/cls2/hello.cls
+					
+					@RequestMapping("/board/boardList.cls")
+					<== http:/localhost/cls2/board/boardList.cls
+					
+			2. 여러개의 요청을 함수 하나가 처리하는 방법
+				
+				@RequestMapping(path={"요청내용1", "요청내용2", ...})
+				
+				예 ]
+					
+					@RequestMapping(path={"/hello.cls", "/board/boardList.cls"})
+					
+					<== http://localhost/cls2/hello.cls
+					<== http:/localhost/cls2/board/boardList.cls
+					
+			3. 요청 방식에 따라 달라지는 방법
+				==> GET 방식이냐? POST 방식이냐에 따라 다르게 처리하는 방법
+					
+					@RequestMapping(method=RequestMethod.POST)
+					==> POST 방식으로 요청하는 요청에만 실행되도록 하는 방법
+					
+					
+			4. 파라미터 존재 여부에 따라 달라지는 방법
+				==> 특정 파라미터가 존재하는 경우에 한해서 함수를 
+					실행하도록 하는 방법
+					
+					@RequestMapping(path="요청내용", params="키값")
+					
+					예 ]
+						@RequestMapping(params="orino")
+						==> orino 라는 파라미터가 존재할 경우 이 함수를 실행하세요...
+						
+					참고 ]
+						키값 앞에 "!" 를 붙이면 반대의 의미(존재하지 않으면)
+						의 의미가 된다.
+						
+			5. 여러 파라미터 존재 여부에 따라 달라지는 방법
+				
+				@RequestMapping(params={"키값1", "키값2", ...})	
+					
+				예 ]
+					@RequestMapping(params={"orino", "nowPage"})
+					
+			6. 파라미터의 값이 특정 값인지에 따라 달라지는 방법
+				
+				@RequestMapping(params="키값=데이터")
+				
+				예 ]
+					@RequestMapping(params="nowPage=1")
+					==> nowPage 라는 파라미터의 값이 1로 요청하는 경우 이 함수를 실행하세요...
+					
+					
+		위의 6가지 방법이 혼합되어서 사용되어진다.
+		혼합 방식은 , 를 이용해서 6가지중 필요한 요소를 등록해서 사용하면 된다.
+
+			예 1 ]
+				/board/boardList.cls 로 요청할 때
+				orino 가 존재하는 경우에 한해서 특정함수를 실행해주세요...
+				
+				==>
+				@RequestMapping("/board/boardList.cls", params="orino")
+				
+			예 2 ]
+				/board/boardList.cls 로 요청할 때
+				orino 가 존재하지 않는 경우에 한해서 특정함수를 실행해주세요...
+				
+				==>
+				@RequestMapping("/board/boardList.cls", params="!orino")
+				
+			예 3 ]
+				/board/boardWriteProc.cls 로 요청이 올때
+				반드시 POST 방식으로 요청하는 경우에만 실행되도록 하세요...
+				
+				@RequestMapping(value="/board/boardWriteProc.cls", method=RequestMethod.POST) 
+				
+				
+				
+	참고 ]
+		와일드 카드를 이용한 요청 처리
+			==> 여러 요청을 하나의 함수가 실행하도록 하는 방법의 일종
+				* 문자를 이용해서 처리하는 방법
+				
+			예 ]
+				@RequestMapping("/board*")
+				==> /board로 시작하는 모든 요청에 대해서 
+					이 함수를 실행하세요...
+					
+	참고 ]
+		value 를 이용한 요청 처리
+		==> 오리지날 형식은 1번 형식이다.
+		
+	참고 ]
+		==> 스프링은 컨트롤러 단위가 아니고
+			함수 단위로 요청을 처리하지만
+			프로그램을 제작하다보면 특정 컨트롤러 안에 있는 함수는
+			거의 공통된 기능을 가지게 된다.
+			
+		예 ]
+			public class BoardController {
+				// 이 안에 있는 함수는
+				// 대부분 게시판에 관련된 요청 함수가
+				// 클래스 블럭 아래에 만들어 질 것이다.
+				
+				@RequestMapping("/board/boardList.cls")
+				public String BoardList(){}
+				
+				@RequestMapping("/board/boardWrite.cls")
+				public String BoardList(){}
+				
+				@RequestMapping("/board/boardWriteProc.cls")
+				public String BoardList(){}
+			}
+
+			이런 형식으로 클래스가 작성이 될 것이고 
+			요청 처리도 위와 같은 것이다.
+			이때 요청 매핑에 모든 함수들이 같은 내용을 기술 하고 있다.
+			이것을 줄이는 방법
+			
+				1. 컨트롤러 단위에 공통 사항을 Mapping 한 후
+				2. 함수 단위에서는 달라지는 내용만 mapping 한다.
+				
+		==> 
+			@Controller
+			@RequestMapping("/board")
+			public class BoardController {
+				// 이 안에 있는 함수는
+				// 대부분 게시판에 관련된 요청 함수가
+				// 클래스 블럭 아래에 만들어 질 것이다.
+				
+				@RequestMapping("/boardList.cls")
+				public String BoardList(){}
+				
+				@RequestMapping("/boardWrite.cls")
+				public String BoardList(){}
+				
+				@RequestMapping("/boardWriteProc.cls")
+				public String BoardList(){}
+			}
+			
+=============================================================================================
+
+뷰처리
+	
+	MVC 패턴에서는 컨트롤러의 역할이 끝나면 뷰를 호출한다.
+	컨트롤러는 자신이 만든 데이터(Model)를 이용해서 화면을 구성할 뷰를 선택해야 한다.
+	
+	스프링에서 뷰를 선택하는 방법
+		
+		1. 요청 처리 함수의 반환값을 String으로 지정해서 뷰를 지정하는 방법
+		
+			반환되는 문자열은 servlet 설정파일에서
+			앞에 붙여줄 문자열과 뒤에 붙여줄 문자열을 설정해 놓고 있다.
+			따라서 반환되는 문자열에 앞뒤에 문자열을 붙여서 뷰를 찾게 된다.
+			우리의 경우 main.jsp를 보여줄 경우 
+			반환되는 문자열은 "main" 로 반환 할 것이고
+			이 문자열에
+			
+			<beans:property name="prefix" value="/WEB-INF/views/" />
+			<beans:property name="suffix" value=".jsp" />
+			
+			로 정의된 prefix와 suffix 를 붙여서 뷰를 찾게 된다.
+			==>
+			"/WEB-INF/views/" + "main" + ".jsp"
+			====> "/WEB-INF/views/main.jsp"
+		
+		***
+		2. 반환값타입을 void 로 지정해서 뷰를 지정하는 방법
+			
+			==> 이때 스프링은 자동적으로 요청내용을 이용해서 뷰를 지정하게 된다.
+			
+			예 ]
+				http://localhost/cls2/board/boardList.cls
+				로 요청할 때 
+				이 요청 처리함수의 반환값이 void 인 경우
+				스프링은 요청내용을 가지고 jsp 파일을 찾게 된다.
+				
+				return "board/boardList";
+				의 효과를 가진다. 다시 말해서 스프링이 내부적으로 위와 같이 처리를 한다.
+				
+				따라서 결국
+				"/WEB-INF/views/board/boardList.jsp"
+				 파일을 호출하게 된다.
+		
+		*****	 
+		3. 반환값타입을 ModelAndView 로 지정해서 처리하는 방법
+			
+			ModelAndView 클래스는 모델과 뷰를 동시에 관리하는 클래스이다.
+			
+			장점 ]
+				생산된 모델(데이터)과 뷰(jsp 파일)를 하나의 클래스로 관리할 수 있다.
+				이 클래스의 객체에 데이터와 뷰를 지정해서 두가지를 동시에 지정할 수 있다.
+				
+			실습 ]
+				요청 : http://localhost/cls2/test02/test03.cls
+				
+				뷰	: /WEB-INF/views/test02/test03.jsp
+				
+				이때 뷰를 부를때 자신의 이름을
+				DATA 라는 키값으로 넘겨보자.
+				
+==============================================================================================
+요청 실행함수의 매개변수 역할
+	
+	결론적으로 말해서 규칙이 없고
+	컨트롤러 작업에서 필요한 요소가 생기면
+	매개변수에 등록만 해주면 스프링이 알아서 만들어 준다.
+	
+	**
+	참고 ]
+		스프링에서는 파라미터를 VO 클래스를 이용해서 받을 수 있다.
+		
+		장점 ]
+			파라미터가 많은 경우 일반적으로 req 로 받으면
+			코드의 길이가 길어지고 복잡해진다.
+			이 문제를 해결하는 방법으로 VO 클래스의 변수에 
+			받은 파라미터 데이터를 한번에 저장해 준다.
+			
+		방법 ]
+			1. 파라미터를 받을 수 있는 VO 클래스를 제작한다.
+				<== 파라미터의 키값과 같은 이름의 변수로 VO 클래스가 만들어져야 한다.
+				
+				이때 VO 클래스 안에는
+					getXXXX()	==> EL에서 사용할 목적으로 만들어야 하고
+					setXXXX()	==> 스프링에서 파라미터를 받을 목적으로 만들어진다.
+					
+				즉, 스프링은 파라미터의 해당 키값으로 setXXX() 함수를 이용해서 데이터를 기억하게 된다. 
+			2. 매개변수에 VO 클래스를 등록만 해주면
+				스프링이 알아서 파라미터를 받아준다.
