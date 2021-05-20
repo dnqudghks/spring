@@ -1,0 +1,68 @@
+day03
+
+스프링에서 데이터베이스(oracle) 연동하기
+
+1. 커넥션 풀과 오라클에 필요한 라이브러리(ojdbc6)를 불러와야한다.
+
+	참고 ]
+		Maven 방식에서 pom.xml 파일에서 필요한 라이브러리를 등록하면
+		자동으로 다운받고 설치를 하게된다.
+		
+		1) 스프링에서 JDBC를 사용하기 위한 라이브러리
+		
+		<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-jdbc</artifactId>
+	    <version>${org.springframework-version}</version>
+		</dependency>   
+		
+		2) 커넥션 풀 라이브러리
+		<dependency>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>1.4</version>
+		</dependency>
+		
+		
+		3)ojdbc6 라이브러리
+		
+		  Maven 방식에 의하면
+		  이것도 pom.xml 파일에 등록하면 불러와 줘야한다.
+		  
+		  하지만
+		  오라클은 상업용 프로그램이므로 
+		  Maven 저장소(Repository)에 얼마전까지는 저장되어있지 않았다.
+		  
+		  따라서 별도의 저장소에서 이 라이브러리를 불러와야 했는데
+		  오라클이 이것을 막아놓았었다.
+		  
+		  따라서 수동으로 라이브러리를 다운받아서
+		  그 라이브러리를 스프링 프레임워크에 등록을 해주어야 했었다.
+		  
+		  외부 저장소 등록 방법 ]
+				<repositories>
+					<repository>
+						<id>레포지토리 아이디</id>
+						<url>외부 저장소 URL 주소</url>
+					</repository>
+				</repositories>		    
+				
+			라고 추가해주면 되는데
+			이 때 추가하는 위치는 <dependencies>태그위에 기술되어야 한다.
+			
+			수동으로 라이브러리를 추가하는 방법 ]
+			
+				<dependency>
+					<groupId>oracle.jdbc</groupId>
+					<artifactId>Oracle</artifactId>
+					<version>12.1.0.2.0</version>
+					<scope>system<scope>
+					<systemPath></systemPath>
+				</dependency>
+				
+				
+		*****
+		메이븐 저장소에 ojdbc6 라이브러리가 등록되어있고
+		그 라이브러리를 등록해서 사용하면 된다.
+		수동으로 다운받은 라이브러리를 사용하는 방법을 테스트 해보고
+		메이븐 저장소에 등록된 라이브러리를 사용하는 방법으로 예제를 진행한다.
