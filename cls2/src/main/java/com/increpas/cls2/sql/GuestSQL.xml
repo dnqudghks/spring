@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gSQL">
+	<select id="allList" resultType="bVO">
+		SELECT
+			gno, mno, id, savename avatar, body ebody, wdate
+		FROM
+			guestBoard g, member, avatar
+		WHERE
+			writer = mno
+			AND avt = ano
+			AND g.isshow = 'Y'
+		ORDER BY
+			wdate DESC
+	</select>
+	
+	<!-- 작성글 수 조회 질의명령 -->
+	<select id="getCount" resultType="int" parameterType="string">
+		SELECT
+			count(*)
+		FROM
+			guestBoard
+		WHERE
+			writer =	(
+							SELECT
+								mno
+							FROM
+								member
+							WHERE
+								id = #{id}
+						)
+	</select>
+	
+	<!-- 작성자 정보조회 질의명령 -->
+	<select id="writerInfo" resultType="bVO" parameterType="string">
+		SELECT
+			mno, savename avatar
+		FROM
+			member, avatar
+		WHERE
+			avt = ano
+			AND id = #{id}
+	</select>
+	
+	
+	<insert id="addGBoard" parameterType="bVO">
+		<selectKey keyProperty="gno" resultType="int" order="BEFORE">
+			SELECT
+				NVL(MAX(gno) + 1, 1001)
+			FROM
+				guestBoard
+		</selectKey>
+		INSERT INTO
+			guestBoard(gno, body, writer)
+		VALUES(
+			#{gno}, #{body}, #{mno}
+		)
+	</insert>
+	
+</mapper>

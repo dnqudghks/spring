@@ -1,68 +1,257 @@
-day03
+# day03
 
-스프링에서 데이터베이스(oracle) 연동하기
+스프링에서 데이터베이스(Oracle) 연동하기
 
-1. 커넥션 풀과 오라클에 필요한 라이브러리(ojdbc6)를 불러와야한다.
+1. 커넥션 풀과 오라클에 필요한 라이브러리(ojdbc6)를 불러와야 한다.
 
 	참고 ]
-		Maven 방식에서 pom.xml 파일에서 필요한 라이브러리를 등록하면
-		자동으로 다운받고 설치를 하게된다.
+		Maven 방식에서 pom.xml 파일에 필요한 라이브러리를 등록하면
+		자동으로 다운받고 설치를 하게 된다.
 		
 		1) 스프링에서 JDBC를 사용하기 위한 라이브러리
 		
-		<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-jdbc</artifactId>
-	    <version>${org.springframework-version}</version>
-		</dependency>   
-		
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${org.springframework-version}</version>
+			</dependency>
+			
 		2) 커넥션 풀 라이브러리
-		<dependency>
-		    <groupId>commons-dbcp</groupId>
-		    <artifactId>commons-dbcp</artifactId>
-		    <version>1.4</version>
-		</dependency>
-		
-		
-		3)ojdbc6 라이브러리
-		
-		  Maven 방식에 의하면
-		  이것도 pom.xml 파일에 등록하면 불러와 줘야한다.
-		  
-		  하지만
-		  오라클은 상업용 프로그램이므로 
-		  Maven 저장소(Repository)에 얼마전까지는 저장되어있지 않았다.
-		  
-		  따라서 별도의 저장소에서 이 라이브러리를 불러와야 했는데
-		  오라클이 이것을 막아놓았었다.
-		  
-		  따라서 수동으로 라이브러리를 다운받아서
-		  그 라이브러리를 스프링 프레임워크에 등록을 해주어야 했었다.
-		  
-		  외부 저장소 등록 방법 ]
+			<dependency>
+			    <groupId>commons-dbcp</groupId>
+			    <artifactId>commons-dbcp</artifactId>
+			    <version>1.4</version>
+			</dependency>
+			
+		3) ojdbc6 라이브러리
+			
+			Maven 방식에 의하면
+			이것도 pom.xml 파일에 등록하면 불러와 줘야한다.
+			
+			하지만
+			오라클은 상업용 프로그램이므로
+			Maven 저장소(Repository)에 얼마전까지는 저장되어 있지 않았다.
+			
+			따라서 별도의 저장소에서 이 라이브러리를 불러와야 했는데
+			오라클이 이것을 막아놓았었다.
+			
+			따라서 수동으로 라이브러리를 다운받아서
+			그 라이브러리를 스프링 프레임워크에 등록을 해줘야 했었다.
+			
+			외부 저장소 등록 방법 ]
 				<repositories>
 					<repository>
-						<id>레포지토리 아이디</id>
+						<id>레포지터리 아이디</id>
 						<url>외부 저장소 URL 주소</url>
 					</repository>
-				</repositories>		    
+				</repositories>
 				
-			라고 추가해주면 되는데
-			이 때 추가하는 위치는 <dependencies>태그위에 기술되어야 한다.
+				라고 추가해주면 되는데
+				이 때 추가하는 위치는 <dependencies> 태그 위에 기술되어야 한다.
 			
 			수동으로 라이브러리를 추가하는 방법 ]
-			
+				
 				<dependency>
 					<groupId>oracle.jdbc</groupId>
-					<artifactId>Oracle</artifactId>
+					<artifactId>OracleDriver</artifactId>
 					<version>12.1.0.2.0</version>
-					<scope>system<scope>
+					<scope>system</scope>
 					<systemPath></systemPath>
 				</dependency>
 				
 				
-		*****
-		메이븐 저장소에 ojdbc6 라이브러리가 등록되어있고
-		그 라이브러리를 등록해서 사용하면 된다.
-		수동으로 다운받은 라이브러리를 사용하는 방법을 테스트 해보고
-		메이븐 저장소에 등록된 라이브러리를 사용하는 방법으로 예제를 진행한다.
+	****
+	다행스럽게도 요즘은 메이븐 저장소에 ojdbc6 라이브러리가 등록되어있고
+	그 라이브러리를 등록해서 사용하면 된다.
+	
+	우리의 경우는 수동으로 다운받은 라이브러리를 사용하는 방법을 테스트 해보고
+	*
+	메이븐저장소에 등록된 라이브러리를 사용하는 방법으로 예제를 진행하겠다.
+	
+	
+커넥션 풀 설정하기
+	1. 
+		1)
+		<resource> 를 이용해서 커넥션 풀을 설치한 후 사용하는 방법
+		
+			<Resource
+				name="jdbc/TestDB"
+				auth="Container"
+				type="javax.sql.DataSource"
+				driverClassName="oracle.jdbc.driver.OracleDriver"
+				url="jdbc:oracle:thin:@localhost:1521:xe"
+				username="hello"
+				password="increpas"
+				maxActive="8"
+				maxIdle="2"
+			/>
+			
+		2) <bean> 처리
+			
+			<bean id="dataSource" 
+					class="org.springframework.jndi.JndiObejectFactoryBean">
+				<property name="jndiName" value="java:comp/env/jdbc/TestDB" />
+				<property name="resourceRef value="true" />
+			</bean>
+		
+	2. 직접 <bean> 처리하는 방법
+		
+		==> DataSource를 DI 객체로 생성하면서 그 안에서 커넥션 풀을 잡아준다.
+		
+		방법 ]
+			
+			<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+				<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+				<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+				<property name="username" value="hello" />
+				<property name="password" value="increpas" />
+				<property name="maxActive" value="8" />
+			</bean>
+			
+			
+****************************************************************************************************
+스프링에서는 데이터베이스 작업을 Mapper 또는 ORM 프로그램을 이용해서 처리하고 있다.
+우리의 경우는 myBatis 라는 Mapper 프로그램을 사용해서 데이터베이스 작업을 처리하기로 한다.
+
+사용 방법 ]
+	1. myBatis 라이브러리를 추가해준다.
+	2. myBatis와 Spring을 연결해주는 라이블러리를 추가한다.
+	3. myBatis 환경 설정을 한다.
+		/src/main/java/resources/mybatis-config.xml
+		을 만들어서 내부에 설정을 기술한다.
+
+
+===============================================================================
+
+DI(Dependency Injection)
+==> 의존 주입이라고 번역하며
+	어떤 클래스를 사용하는데 있어서 스스로 필요한 클래스를 new 시켜서 사용하지 않고
+	다른 곳에서 new 시킨것(spring 에서 new 시킨것...)을 받아서 사용하는 방법
+	
+	스프링은 빈처리하고 하여
+	xml 파일에서 직접 필요한 클래스를 new 시키는 기능을 가지고 있다.
+	
+	빈처리 방법 ]
+		
+		<bean id="객체이아디"
+				class="객체로 만들 클래스 경로" />
+				
+		==> 
+			클래스 객체아이디 = new 클래스();
+			
+	이처럼 xml 파일을 이용해서 new 시킨것을
+	필요한 자바 소스에서 가지고 와서(의존주입)해서 사용할 수 있다.
+	
+------------------------------------------------------------------------------------
+자동 의존 주입
+==> <bean> 처리된 클래스를 필요한 곳에
+	어노테이션을 이용해서 자동적으로 생성된 객체를 사용 가능하도록 하는 것.
+	
+	방법 1 ]
+		@Autowired
+		==> 모든 <bean> 처리된 클래스를 자동으로 찾아서 주입하는 어노테이션
+		
+		형식 ]
+			
+			@Autowired
+			빈처리된클래스이름	변수;
+			
+		주의사항 ]
+			<bean> 처리하지 않은 클래스를 사용할 경우는 에러가 발생한다.
+		
+	방법 2 ]
+		@Qualifier
+		==> 동일한 클래스가 여러번 <bean> 처리된 경우에
+			특정 클래스를 선택하도록 하는 어노테이션
+		
+	방법 3 ]
+		@Resource
+		==> 자동 의존 주입할 클래스를 지정해서 주입하도록 하는 어노테이션
+		
+참고 ]
+	@Autowired 를 사용하는 지점
+		
+		1. 변수 생성에서 사용할 수 있다.
+		2. 생성자 함수에서 사용할 수 있다.
+		3. set 함수에서 사용할 수 있다.
+		
+예 ]
+	
+	<bean id="mDao"
+			class="jenny.dao.MemberDao" />  <== MemberDao mDao = new MemberDao();
+			
+	<bean id="print1" class="jenny.MemberPrint">
+		<qualifier value="sysout" />
+	</bean>
+	<bean id="print2" class="jenny.MemberPrint" />
+	
+	public class MemberInfoPrint {
+		
+		@Autowired
+		public MemberInfoPrint(MemberDao mDao, @Qualifier("sysout") MemberPrint mPrint){}
+	}
+	의 방식으로 특정 <bean>을 선택해서 주입시킬 수 있다.
+	
+	참고 ]
+		@Autowired를 사용한 경우
+		자동으로 <bean> 을 찾아서 자동 의존 주입을 해주게 된다.
+		반대로 말하면 해당 <bean>을 찾지 못하면 에러가 발생한다.
+		
+		이런 경우를 대비해서 만약 <bean>을 찾지 못하더라도
+		에러 없이 진행시킬 수 있는 방법
+		(==> 이때 자동 의존 주입은 안된다. )
+		
+		형식 ]
+			@Autowired(required=false)
+			
+@Resource 에 의한 자동 의존 주입
+==> @Autowired 보다는 강력하지 않고
+	다만 <bean> 처리된 것중에서 특정한 <bean>을 선택해서 자동 의존주입해주는 기능이다.
+	
+	형식 ]
+		
+		@Resource(name="<bean>의 ID값")
+		변수선언
+		생성자
+		setXXX()
+		
+	참고 ]
+		@Resource 에서 원하는 <bean>을 찾는 순서
+			
+			1. name에 지정한 값과 동일한 id 값의 <bean>을 찾아서 의존주입을 한다.
+			2. 만약 id에 해당하는 <bean>이 없으면
+				클래스 이름을 이용해서 <bean>을 찾아서 자동 주입한다.
+				==> 소문자로 바꾼 클래스이름으로 찾게 된다.
+				예 ]
+					Jenny	==> jenny
+			3. 만약 같은 이름이 중복되면 에러가 발생한다.
+				(물론 이 경우에는 @Qualifier 를 이용해서 구분 처리할 수 있다.)
+				
+====================================================================================================
+
+참고 ]
+	
+	명시적 의존 주입과 묵시적 자동 의존주입이 같이 존재할 경우에는
+	명시적 의존 주입을 우선으로 사용한다.
+	
+	예 ]
+		
+		<bean id="memberDao" class="jenny.dao.MemberDao" />
+		
+		<bean id="print" class="jenny.MemberPrint" />
+		<bean id="print2" class="jenny.MemberPrint" />
+		
+		<bean id="infoPrint" class="jenny.MemberInfoPrint">
+			// 명시적으로 set 함수를 이용해서 의존 주입을 시키도록 할 수 있다.
+			<property name="print" ref="print2" />
+		</baen>
+		
+		public class MemberInfoPrint {
+			@Autowired
+			private MemberDao mDao;
+			
+			@Autowired
+			private MemberPrint print;
+		}
+	
+======================================================================================

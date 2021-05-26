@@ -5,10 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="/cafe/css/w3.css">
-<link rel="stylesheet" type="text/css" href="/cafe/css/user.css">
-<script type="text/javascript" src="/cafe/js/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="/cafe/js/w3color.js"></script>
+<link rel="stylesheet" type="text/css" href="/cls2/css/w3.css">
+<link rel="stylesheet" type="text/css" href="/cls2/css/user.css">
+<script type="text/javascript" src="/cls2/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/cls2/js/w3color.js"></script>
 <style type="text/css">
 	label {
 		font-size: 14pt;
@@ -24,11 +24,11 @@
 	$(document).ready(function(){
 		$('#hbtn').click(function(){
 			// addMember.jsp 페이지로 돌려보낸다.
-			$(location).attr('href', '/cafe/main.cafe');
+			$(location).attr('href', '/cls2/main.cls');
 		});
 		
 		$('#ebtn').click(function(){
-			$(location).attr('href', '/cafe/member/myInfoEdit.cafe');
+			$(location).attr('href', '/cls2/member/myInfoEdit.cls');
 		});
 	});
 </script>
@@ -36,7 +36,7 @@
 <body>
 
 	<div class="w3-content mxw650 w3-center">
-	<c:if test="${(DATA.gen eq '남자') or (DATA.gen eq '남성')}">
+	<c:if test="${DATA.gen eq 'M'}">
 		<h1 class="w3-green w3-padding w3-card-4 w3-round-large">
 			<c:if test="${SID eq DATA.id}">
 				내 정보
@@ -46,7 +46,7 @@
 			</c:if>
 		</h1>
 	</c:if>
-	<c:if test="${(DATA.gen eq '여자') or (DATA.gen eq '여성')}">
+	<c:if test="${DATA.gen eq 'F'}">
 		<h1 class="w3-pink w3-padding w3-card-4 w3-round-large">
 			<c:if test="${SID eq DATA.id}">
 				내 정보
@@ -80,7 +80,7 @@
 				</div>
 				<div class="w3-col w3-margin-top">
 					<label class="w3-col m3 w3-right-align w3-text-grey">회원성별 : </label>
-					<span id="gen" class="w3-col m8 mgl20 pdl20">${DATA.gen}</span>
+					<span id="gen" class="w3-col m8 mgl20 pdl20">${DATA.gen eq 'M' ? '남자' : '여자'}</span>
 				</div>
 				<div class="w3-col pdt10 w3-margin-top">
 					<label class="w3-col m3 w3-right-align w3-text-grey">가 입 일 : </label>
@@ -90,7 +90,7 @@
 				<div class="w3-col w3-margin-top w3-margin-bottom">
 					<label class="w3-col m3 w3-right-align w3-text-grey">아바타 : </label>
 					<div class="w3-col m8 mgl20 pdl20">
-						<img src="/cafe/img/avatar/${DATA.avatar}" 
+						<img src="/cls2/img/avatar/${DATA.savename}" 
 								class="w3-border w3-border-grey w3-card-2 avtimg" id="avtimg${DATA.ano}">
 					</div>
 				</div>
@@ -99,20 +99,20 @@
 		<div class="w3-col w3-margin-top w3-card-4 showFr">
 
 <c:if test="${SID ne DATA.id}">
-	<c:if test="${(DATA.gen eq '남자') or (DATA.gen eq '남성')}">
+	<c:if test="${DATA.gen eq 'M'}">
 			<div class="w3-col w3-padding w3-green w3-hover-lime" id="hbtn">
 	</c:if>
-	<c:if test="${(DATA.gen eq '여자') or (DATA.gen eq '여성')}">
+	<c:if test="${DATA.gen eq 'F'}">
 			<div class="w3-col w3-padding w3-purple w3-hover-pink" id="hbtn">
 	</c:if>
 				home
 			</div>
 </c:if>
 <c:if test="${SID eq DATA.id}">
-	<c:if test="${(DATA.gen eq '남자') or (DATA.gen eq '남성')}">
+	<c:if test="${DATA.gen eq 'M'}">
 			<div class="w3-half w3-padding w3-green w3-hover-lime w3-button" id="hbtn">
 	</c:if>
-	<c:if test="${(DATA.gen eq '여자') or (DATA.gen eq '여성')}">
+	<c:if test="${DATA.gen eq 'F'}">
 			<div class="w3-half w3-padding w3-purple w3-hover-pink w3-button" id="hbtn">
 	</c:if>
 				home

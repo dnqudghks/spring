@@ -1,0 +1,39 @@
+# day04
+
+spring setting
+	0.
+		이클립스를 2020.06 버젼은 다운받는다.(jee 버젼)
+		톰캣설치
+		메이븐설치
+		
+		이클립스 워크스페이스는 반드시 사용자계정폴더가 아닌 다른 폴더에 만든다.
+		
+	1. 프로젝트를 만든다.
+		spring --> spring lagacy project --> spring mvc project
+		
+		java build path, project facets 확인
+		인코딩 설정
+		폰트 설정
+		
+		톰캣에 프로젝트 추가
+		==> 포트번호, URIEncoding 확인
+		
+	2. 메이븐 설정을 한다. (pom.xml)
+	
+	3. web.xml 수정
+		==> 서블릿 만들고 맵핑하고...
+		
+	4. 서블릿설정 xml 파일을 수정...
+	
+	5. 데이터베이스 설정...
+		root-context.xml 수정
+		==> 
+			마이바티스 설정파일 수정(mybatis-config.xml)
+			
+	6. home.jsp 화면에 출력
+	
+	==============================================================
+	오전중에 
+		class02 스프링 프로젝트를 만들고 로그인 페이지를 띄워주세요.
+		
+		

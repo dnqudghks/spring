@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- myBatis 활동방식 설정 -->
+	<settings>
+		<setting name="cacheEnabled" value="false" />
+		<setting name="useGeneratedKeys" value="true" />
+		<setting name="defaultExecutorType" value="REUSE" />
+	</settings>
+	<!--  
+		setting 속성 설명
+			
+			cacheEnabled		: 같은 질의명령일 경우 캐시 기능 사용여부를 경정하는 속성
+									기본 값은 true
+			useGeneratedKeys	: 생성 키에 대한 JDBC 지원을 허용
+									드라이버마다 조금씩 다르게 작동한다.
+			defaultExecutorType	: 디폴트 실행자 설정
+									
+									REUSE	: PreparedStatement 를 재사용
+									SIMPLE	: 특별히 하는것이 없음
+									BATCH	: 구문은 재사용하고 수정을 배치 처리
+	-->
+	
+	<!-- 마이바티스에서 사용할 자바 타입의 별칭을 선언하는 부분 -->
+	<typeAliases>
+		<typeAlias alias="mVO" type="com.increpas.cls2.vo.MemberVO" />
+		<typeAlias alias="bVO" type="com.increpas.cls2.vo.BoardVO" />
+		<typeAlias alias="fVO" type="com.increpas.cls2.vo.FileVO" />
+		<typeAlias alias="page" type="com.increpas.cls2.util.PageUtil" />
+	</typeAliases>
+	<!--  
+		마이바티스에서 자바의 클래스 타입을 사용할 경우에는 
+		전체경로를 사용하는 것이 원칙이다.
+		
+		예 ]
+			String 의 경우
+			<typeAlias alias="string" type="java.lang.String" />
+			로 별칭을 만들고 사용해야 한다.
+			
+			만들지 않을 경우에는 
+			질의명령 xml에서 
+				resultType		: 반환해주는 타입
+				parameterType	: 전달받은 데이터 타입
+			두가지의 타입을 
+				resultType="java.lang.String"
+			로 사용해야 하는데
+			별칭을 부여한 경우에는
+				resultType="string"
+		*******************************************************************************************
+		myBatis는 자바가 아니기 때문에 
+		원칙적으로 자바의 데이터 타입을 인식할 수 없다.
+		따라서 자바의 특정 데이터 타입이 필요하면 해당 클래스의 경로를 알려주고
+		그 클래스에 대한 타입을 별칭으로 만들어 줘야 사용할 수 잇다.
+		
+		그런데 자바에서 자주 사용하는 정수형이나 맵이나 또는 문자열 같은 타입의 경우는
+		사용빈도가 높기 때문에 마이바티스가 버젼업이 되면서 내부적으로 미리 
+		알리아스(별칭)을 매핑해 놓았다.
+		
+		따라서 필요한 데이터 타입이 있으면
+		typeAliases 태그 하위에 
+			typeAlias라는 태그를 만들고 
+			매핑을 추가해줘야 사용할 수 있다.
+	-->
+	
+	<!-- 질의명령 파일 불러오기 -->
+	<mappers>
+		<!--  
+			myBatis 가 사용할 질의명령 xml 파일을 가져오는 부분...
+			myBatis는 자바프로그램이 아니기때문에
+			경로를 찾을 때
+				. 을 구분자로 사용하지 않고
+				/ 를 구분자로 사용해서 경로를 찾는다.
+				
+		########################################################################################
+		참고 ]
+			질의명령을 작성하는 xml 문서는 문서 스스로 작동하는 것이 아니고
+			dao 클래스의 함수 내에서
+			SqlSessionTemplate 클래스에서 호출해서 사용한다.
+			따라서
+			질의명령에 채워줘야 하는 데이터는 dao에서 채워주는 변수이름으로 작성해야 한다.
+		-->
+		<mapper resource="com/increpas/cls2/sql/MemberSQL.xml" />
+		<mapper resource="com/increpas/cls2/sql/GuestSQL.xml" />
+		<mapper resource="com/increpas/cls2/sql/ReBoardSQL.xml" />
+	</mappers>
+
+</configuration>

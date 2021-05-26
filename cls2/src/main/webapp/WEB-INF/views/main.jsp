@@ -60,26 +60,26 @@
 			var tid = $(this).attr('id');
 			var url = '';
 			switch(tid){
-			case 'clsLogin':
+			case 'cafeLogin':
 				url = '/cls2/member/login.cls';
 				break;
-			case 'clsJoin':
+			case 'cafeJoin':
 				url = '/cls2/member/join.cls';
 				break;
-			case 'clsLogout':
+			case 'cafeLogout':
 				url = '/cls2/member/logout.cls';
 				break;
-			case 'clsMyInfo':
+			case 'cafeMyInfo':
 				url = '/cls2/member/myInfo.cls';
 				break;
 			case 'membList':
 				url = '/cls2/member/memberList.cls';
 				break;
 			case 'gboard':
-				url = '/cls2/gboard/gBoardList.cls';
+				url = '/cls2/gBoard/gBoardList.cls';
 				break;
 			case 'reboard':
-				url = '/cls2/reBoard/reBoardList.cls';
+				url = '/cls2/reBoard/reBoardList.cls'; 
 				break;
 			case 'board':
 				url = '/cls2/board/board.cls';
@@ -97,27 +97,27 @@
 	</form>
 	
 	<div class="w3-content mxw700 w3-center w3-margin-top">
-		<h1 class="w3-margin-top w3-blue w3-card-4 w3-padding">CLS Project</h1>
+		<h1 class="w3-margin-top w3-blue w3-card-4 w3-padding">Spring Project</h1>
 		<div class="w3-margin-top">
 			
 			<!-- 수업 예제 링크 버튼 추가 장소 -->
 			<div class="w3-col w3-padding w3-border-bottom">
 				<h4 class="w3-col s4 w3-text-grey">Member Request</h4>
 				<div class="w3-col s8">
-		<c:if test="${empty SID }">
+		<c:if test="${empty SID}">
 					<div class="w3-col w3-deep-purple w3-margin-bottom w3-button cafeMBtn" id="cafeLogin">
-						<h4>Cafe Login</h4>
+						<h4>Cls2 Login</h4>
 					</div>
 					<div class="w3-col w3-blue w3-margin-bottom w3-button cafeMBtn" id="cafeJoin">
-						<h4>Cafe Join</h4>
+						<h4>Cls2 Join</h4>
 					</div>
 		</c:if>
-		<c:if test="${not empty SID }">
+		<c:if test="${not empty SID}">
 					<div class="w3-col w3-purple w3-margin-bottom w3-button cafeMBtn" id="cafeMyInfo">
-						<h4>Cafe 내 정보보기</h4>
+						<h4>Cls2 내 정보보기</h4>
 					</div>
 					<div class="w3-col w3-deep-purple w3-margin-bottom w3-button cafeMBtn" id="cafeLogout">
-						<h4>Cafe 로그아웃</h4>
+						<h4>Cls2 로그아웃</h4>
 					</div>
 					<div class="w3-col w3-blue w3-margin-bottom w3-button cafeMBtn" id="membList">
 						<h4>회원 목록 보기</h4>

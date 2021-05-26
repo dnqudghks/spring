@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="reSQL">
+	
+	<!-- 총 게시물갯수 조회 질의명령 -->
+	<select id="getTotal" resultType="int">
+		SELECT
+			count(*)
+		FROM
+			reBoard
+		WHERE
+			isShow = 'Y'
+	</select>
+	
+	<!-- 페이지 게시글 조회 질의명령  -->
+	<select id="rnoList" resultType="bVO" parameterType="page">
+		SELECT
+		    rno, bno, mno, id, avatar, title, ebody, upno, wdate, step
+		FROM
+		    (
+		        SELECT
+		            ROWNUM rno, bno, mno, id, avatar, title, body ebody, upno, wdate, step
+		        FROM
+		            (
+		                SELECT
+		                    rno bno, mno, id, savename avatar, title, body, upno, wdate, level - 1 as step
+		                FROM
+		                    reboard r, member, avatar
+		                WHERE
+		                    wmno = mno
+		                    AND avt = ano
+		                    AND r.isShow = 'Y'
+						START WITH
+		                    upno IS NULL
+		                CONNECT BY
+		                    PRIOR rno = upno
+		                ORDER SIBLINGS BY
+		                    wdate DESC
+		            )
+		    )
+		WHERE
+		    rno BETWEEN #{startCont} AND #{endCont}
+	</select>
+	
+	<!-- 원글 등록 질의명령 -->
+	<insert id="addReBoard" parameterType="bVO">
+		<selectKey keyProperty="bno" resultType="int" order="BEFORE">
+			SELECT
+				NVL(MAX(rno) + 1, 100001)
+			FROM
+				reboard
+		</selectKey>
+		INSERT INTO
+		    reboard(rno, title, body, wmno)
+		VALUES(
+		    #{bno}, #{title}, #{body}, #{mno}
+		)
+	</insert>
+	
+	<!-- 댓글 등록 질의명령 -->
+	<insert id="addReply" parameterType="bVO">
+		<selectKey keyProperty="bno" resultType="int" order="BEFORE">
+			SELECT
+				NVL(MAX(rno) + 1, 100001)
+			FROM
+				reboard
+		</selectKey>
+		INSERT INTO
+		    reboard(rno, title, body, wmno, upno)
+		VALUES(
+		    #{bno}, #{title}, #{body}, #{mno}, #{upno}
+		)
+	</insert>
+	
+	<!-- 게시글 삭제 질의명령 (하위글들도 삭제하기로 하자.) -->
+	<delete id="reboardDel" parameterType="int">
+		UPDATE
+		    reboard
+		SET
+		    isShow = 'N'
+		WHERE
+		    rno IN (
+				        SELECT
+				            rno
+				        FROM
+				            reboard
+				        START WITH
+				            rno = #{bno}
+				        CONNECT BY
+				            PRIOR rno = upno        
+				    )
+	</delete>
+	
+	<!-- 게시글 수정 데이터 조회 질의명령 -->
+	<select id="editReBoard" resultType="bVO" parameterType="int">
+		SELECT
+		    r.rno bno, r.title, r.body, r.wmno mno, r.upno, pr.title uptitle, savename avatar 
+		FROM
+		    reboard r, reboard pr, member, avatar
+		WHERE
+		    r.isShow = 'Y'
+		    AND r.upno = pr.rno(+)
+		    AND r.wmno = mno
+		    AND avt = ano
+		    AND r.rno = #{bno}
+	</select>
+	
+	<!-- 게시글 수정 처리 질의명령 -->
+	<update id="editProc" parameterType="bVO">
+		UPDATE
+			reboard
+		<set>
+			<if test="title neq null">
+				title = #{title},
+			</if>
+			<if test="body neq null">
+				body = #{body}
+			</if>
+		</set>
+		WHERE
+			rno = #{bno}
+	</update>
+</mapper>
