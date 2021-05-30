@@ -1,10 +1,8 @@
 package com.increpas.cls2.controller;
 
-import java.io.*;
 import java.util.*;
 import java.util.HashMap;
 
-import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.springframework.beans.factory.annotation.*;

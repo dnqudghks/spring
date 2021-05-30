@@ -5,10 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="/cafe/css/w3.css">
-<link rel="stylesheet" type="text/css" href="/cafe/css/user.css">
-<script type="text/javascript" src="/cafe/js/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="/cafe/js/w3color.js"></script>
+<link rel="stylesheet" type="text/css" href="/cls2/css/w3.css">
+<link rel="stylesheet" type="text/css" href="/cls2/css/user.css">
+<script type="text/javascript" src="/cls2/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/cls2/js/w3color.js"></script>
 <style type="text/css">
 	span.h25 {
 		line-height: 50%;
@@ -24,19 +24,19 @@
 			var url = '';
 			switch(tid){
 			case 'hbtn':
-				url = '/cafe/main.cafe';
+				url = '/cls2/main.cls';
 				break;
 			case 'lbtn':
-				url = '/cafe/member/login.cafe';
+				url = '/cls2/member/login.cls';
 				break;
 			case 'jbtn':
-				url = '/cafe/member/join.cafe';
+				url = '/cls2/member/join.cls';
 				break;
 			case 'wbtn':
-				url = '/cafe/board/boardWrite.cafe';
+				url = '/cls2/board/boardWrite.cls';
 				break;
 			case 'outbtn':
-				url = '/cafe/member/logout.cafe';
+				url = '/cls2/member/logout.cls';
 				break;
 			}
 			$(location).attr('href', url);
@@ -63,7 +63,7 @@
 			$('#bno').val(tno);
 			
 			// 폼태그가 전송될 주소를 셋팅하고
-			$('#frm').attr('action', '/cafe/board/boardDetail.cafe');
+			$('#frm').attr('action', '/cls2/board/boardDetail.cls');
 			
 			// 폼태그를 전송한다.
 			$('#frm').submit();
@@ -72,7 +72,7 @@
 </script>
 </head>
 <body>
-	<form method="POST" action="/cafe/board/board.cafe"  id="frm" name="frm">
+	<form method="POST" action="/cls2/board/board.cls"  id="frm" name="frm">
 		<input type="hidden" name="nowPage" id="nowPage" value="${PAGE.nowPage}"> <!-- 현재페이지 전송용 || 이동페이지 전송용 -->
 		<input type="hidden" name="bno" id="bno"> <!-- 글번호 전송용태그 -->
 	</form>

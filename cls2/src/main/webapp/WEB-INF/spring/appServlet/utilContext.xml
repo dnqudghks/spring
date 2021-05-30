@@ -9,7 +9,6 @@
 						http://www.springframework.org/schema/context 
 						https://www.springframework.org/schema/context/spring-context.xsd">
 
-	<bean id="page" class="com.increpas.cls2.util.PageUtil">
-		<property name="nowPage" value="1" />
-	</bean>
+	<bean id="page" class="com.increpas.cls2.util.PageUtil" />
+	<bean id="futil" class="com.increpas.cls2.util.FileUtil" />
 </beans>

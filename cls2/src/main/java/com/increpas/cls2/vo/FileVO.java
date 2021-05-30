@@ -1,14 +1,14 @@
 package com.increpas.cls2.vo;
 
+import java.util.Date;
 import java.sql.*;
-import java.text.SimpleDateFormat;
+import java.text.*;
 
 public class FileVO {
 	private int rno, fno, bno, mno, cnt;
 	private long len;
 	private String oriname, savename, dir, sdate;
 	private Date fdate;
-	private Time ftime;
 	
 	public int getRno() {
 		return rno;
@@ -67,17 +67,9 @@ public class FileVO {
 	public String getSdate() {
 		return sdate;
 	}
-	public String setSdate(Date fdate) {
-		SimpleDateFormat form1 = new SimpleDateFormat("yyyy/MM/dd");
-		sdate = form1.format(fdate);
-		return form1.format(fdate);
-	}
-	public String setSdate(Time ftime) {
-		SimpleDateFormat form1 = new SimpleDateFormat("HH:mm:ss");
-		return form1.format(ftime);
-	}
 	public void setSdate() {
-		this.sdate = setSdate(fdate) + " " + setSdate(ftime);
+		SimpleDateFormat form = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss");
+		sdate = form.format(fdate);
 	}
 	public void setSdate(String sdate) {
 		this.sdate = sdate;
@@ -87,11 +79,6 @@ public class FileVO {
 	}
 	public void setFdate(Date fdate) {
 		this.fdate = fdate;
-	}
-	public Time getFtime() {
-		return ftime;
-	}
-	public void setFtime(Time ftime) {
-		this.ftime = ftime;
+		setSdate();
 	}
 }

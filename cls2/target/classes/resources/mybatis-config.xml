@@ -84,6 +84,7 @@
 		<mapper resource="com/increpas/cls2/sql/MemberSQL.xml" />
 		<mapper resource="com/increpas/cls2/sql/GuestSQL.xml" />
 		<mapper resource="com/increpas/cls2/sql/ReBoardSQL.xml" />
+		<mapper resource="com/increpas/cls2/sql/BoardSQL.xml" />
 	</mappers>
 
 </configuration>

@@ -1,17 +1,44 @@
 package com.increpas.cls2.vo;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.util.Date;
+
+import org.springframework.web.multipart.*;
+
 import java.text.*;
 import java.util.*;
 
 public class BoardVO {
 	private int gno, rno, bno, upno, mno, ano, cnt, step;
-	private String id, name, title, uptitle, body, ebody, sdate, avatar;
+	private String id, name, title, uptitle, body, ebody, sdate, savename, avatar;
 	private Date wdate;
-	private Time wtime;
 	private ArrayList<FileVO> list;
+	private MultipartFile upfile;
+	private MultipartFile[] file;
 	
+	/*
+		업로드된 파일을 기억할 변수는
+			MultipartFile
+		이라는 클래스 형태로 만들어야 한다.
+		그러면 그 안에 스트림 형태로 파일의 내용이 기억되게 된다.
+		
+		이때 주의사항
+			만약 name 속성값이 하나이면 일반변수로 만들어 주면 되고
+			같은 name 속성값을 사용하는 태그가 여러개면 (다중업로드의 경우)
+			배열변수로 만들어주면 된다.
+	 */
+	
+	public MultipartFile getUpfile() {
+		return upfile;
+	}
+	public void setUpfile(MultipartFile upfile) {
+		this.upfile = upfile;
+	}
+	public MultipartFile[] getFile() {
+		return file;
+	}
+	public void setFile(MultipartFile[] file) {
+		this.file = file;
+	}
 	public int getGno() {
 		return gno;
 	}
@@ -100,9 +127,8 @@ public class BoardVO {
 		return sdate;
 	}
 	public void setSdate() {
-		SimpleDateFormat form1 = new SimpleDateFormat("yyyy/MM/dd");
-		SimpleDateFormat form2 = new SimpleDateFormat(" HH:mm:ss");
-		sdate = form1.format(wdate) + form2.format(wtime);
+		SimpleDateFormat form = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss");
+		sdate = form.format(wdate);
 	}
 	public void setSdate(Date wdate) {
 		SimpleDateFormat form1 = new SimpleDateFormat("yyyy/MM/dd");
@@ -110,6 +136,12 @@ public class BoardVO {
 	}
 	public void setSdate(String sdate) {
 		this.sdate = sdate;
+	}
+	public String getSavename() {
+		return savename;
+	}
+	public void setSavename(String savename) {
+		this.savename = savename;
 	}
 	public String getAvatar() {
 		return avatar;
@@ -122,12 +154,7 @@ public class BoardVO {
 	}
 	public void setWdate(Date wdate) {
 		this.wdate = wdate;
-	}
-	public Time getWtime() {
-		return wtime;
-	}
-	public void setWtime(Time wtime) {
-		this.wtime = wtime;
+		setSdate();
 	}
 	public ArrayList<FileVO> getList() {
 		return list;
@@ -140,7 +167,7 @@ public class BoardVO {
 	public String toString() {
 		return "BoardVO : gno=" + gno + ", rno=" + rno + ", bno=" + bno + ", mno=" + mno + ", ano=" + ano + ", cnt="
 				+ cnt + ", step=" + step + ", id=" + id + ", name=" + name + ", title=" + title + ", body=" + body
-				+ ", sdate=" + sdate + ", avatar=" + avatar + ", wdate=" + wdate + ", wtime=" + wtime;
+				+ ", sdate=" + sdate + ", avatar=" + avatar + ", wdate=" + wdate ;
 	}
 	
 }

@@ -23,8 +23,9 @@
 			case 'ebtn':
 				// 입력태그의 내용 읽고
 				var title = $('#title').val();
-				var body = $('#body').val();
-				if(!(title && body) || (title == '${DATA.title}' && body == '${DATA.body}')){
+				var body = $('#body').val().replace('\n', ' ');
+				var tbody = '${TBODY}';
+				if(!(title && body) || (title == '${DATA.title}' && body == tbody)){
 					alert('*** 수정내용을 확인하세요! ***');
 					// 함수 즉시 종료
 					return;
@@ -48,7 +49,7 @@
 					}
 				}
 				
-				if(body == '${DATA.body}'){
+				if(body == '${TBODY}'){
 					$('#body').prop('disabled', true);
 				} else {
 					$('#body').prop('disabled', false);
@@ -56,6 +57,7 @@
 				
 				// 이행을 실행하는 경우는 제목과 본문중 적어도 한개는 수정이 되었고
 				// 제목의 글자수도 50자 이내로 작성한 경우이므로 처리페이지를 부른다.
+				
 				$('#frm').submit();
 				
 				return;

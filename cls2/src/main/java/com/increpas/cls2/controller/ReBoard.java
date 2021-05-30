@@ -16,13 +16,13 @@ import com.increpas.cls2.util.*;
 
 /**
  * 	이 클래스는 댓글 게시판 관련 요청 처리 컨트롤러 클래스
- * @author	우병환
+ * @author	전은석
  * @since	2021.05.18
  * @version	v.1.0
  * @see
  * 			작업이력 ]
  * 				2021.05.18 
- * 					- 담당자 	: 우병환
+ * 					- 담당자 	: 전은석
  * 					- 작업내용 	: 클래스 제작
  *
  */
@@ -221,6 +221,8 @@ public class ReBoard {
 		
 		// 3. 데이터 전달
 		mv.addObject("DATA", bVO);
+		mv.addObject("TBODY", bVO.getBody().replaceAll("\r\n", " "));
+		System.out.println("^^^^^^^^^^^ " + bVO.getBody().replaceAll("\r\n", " "));
 		mv.addObject("nowPage", nowPage);
 		// 4. 뷰 부르고
 		mv.setViewName("reBoard/reBoardEdit");

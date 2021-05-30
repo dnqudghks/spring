@@ -5,10 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="/cafe/css/w3.css">
-<link rel="stylesheet" type="text/css" href="/cafe/css/user.css">
-<script type="text/javascript" src="/cafe/js/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="/cafe/js/w3color.js"></script>
+<link rel="stylesheet" type="text/css" href="/cls2/css/w3.css">
+<link rel="stylesheet" type="text/css" href="/cls2/css/user.css">
+<script type="text/javascript" src="/cls2/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/cls2/js/w3color.js"></script>
 <style type="text/css">
 	label.ft14 {
 		line-height: 200%;
@@ -16,6 +16,10 @@
 	
 	#fileImg {
 		display: none;
+	}
+	
+	.img100 {
+		cursor: pointer;
 	}
 	
 </style>
@@ -26,19 +30,19 @@
 				1) a 태그로 요청하는 방법
 				==> href 속성에 요청할 페이지를 기술하면 된다.
 					예 ]
-						<a href="/cafe/main.cafe?id=euns">홈</a>
+						<a href="/cls2/main.cls?id=euns">홈</a>
 						
 						
 				2) 자바스크립트에서 요청하는 방법
 					예 ]
-						location.href = '/cafe/main.cafe?id=' + sid;
+						location.href = '/cls2/main.cls?id=' + sid;
 						
 				3) form 태그를 이용해서 요청하는 방법
 				==> form 태그의 method 속성에 get이라고 기술하고
 					action 속성에 속성값을 요청할 문서를 기술한다.
 					
 					예 ]
-						<form method="GET" action="/cafe/main.cafe" name="frm" id="frm">
+						<form method="GET" action="/cls2/main.cls" name="frm" id="frm">
 							<input type="hidden" name="id" id="id">
 						</form>
 						
@@ -50,19 +54,19 @@
 							
 				4)
 					태그라이브러리로 처리하는 방법
-						<c:redirect url="/cafe/main.cafe">
+						<c:redirect url="/cls2/main.cls">
 							<c:praram name="id" value="euns" />
 						</c:redirect>
 						
 				5) 주소표시줄에 직접 입력하는 방법
-					http://localhost/cafe/main.cafe?id=euns
+					http://localhost/cls2/main.cls?id=euns
 				 
 		2. POST 방식
 		==> 같이 전송되는 데이터(파라미터)가 주소표시줄에 노출되지 않는 방식이다.
 			http 통신의 headers 에 포함되서 전송된다.
 			
 			방법 ]
-				<form method="POST" action="/cafe/main.cafe" name="frm" id="frm">
+				<form method="POST" action="/cls2/main.cls" name="frm" id="frm">
 					<input type="hidden" name="id" id="id" value="euns">
 				</form>
 		
@@ -77,7 +81,6 @@
 	이런 사이즈의 제한 없이 사용할 수 있는 방법은 POST 방식이다.
 --%>
 <script type="text/javascript">
-	alert('${DATA.list.size()}');
 	var cnt = 1;
 	function getCnt(){
 		return cnt;
@@ -86,8 +89,9 @@
 		cnt += 1;
 	}
 	$(document).ready(function(){
-		$('#hbtn').click(function(){
-			location.href = '/cafe/main.cafe';
+		$('#dbtn').click(function(){
+			$('#lfrm').attr('action', '/cls2/board/boardDel.cls');
+			$('#lfrm').submit();
 		});
 		
 		$('#bbtn').click(function(){
@@ -106,11 +110,12 @@
 			
 			var ttitle = $('#title').val();
 			var tbody = $('#body').val();
+			tbody = tbody.replace('\r\n', '<br>');
 			if(ttitle == '${DATA.title}'){
 				// 타이틀 수정이 안된경우
 				$('#title').prop('disabled', true);
 			}
-			if(tbody == '${DATA.body}'){
+			if(tbody == '${DATA.ebody}'){
 				// 분문 수정이 안된 경우...
 				$('#body').prop('disabled', true);
 			}
@@ -147,7 +152,7 @@
 				} else {	
 					setCnt();
 					var idCnt = getCnt();
-					$('#filefr').append('<input type="file" name="file' + idCnt + '" id="file' 
+					$('#filefr').append('<input type="file" name="file" id="file' 
 											+ idCnt + '" class="w3-col w3-input w3-round w3-border mgb10 file">');
 					
 					$('#fileImg').append('<div class="inblock box120 pdAll10 mgl10 w3-border w3-broder-grey w3-card" id="img_' + tid + '">' +
@@ -184,7 +189,7 @@
 			
 			if(confirm(sno + ' ] 파일을 삭제할까요?')){
 				$.ajax({
-					url:'/cafe/board/boardImgDel.cafe',
+					url:'/cls2/board/boardImgDel.cls',
 					type: 'post',
 					dataType: 'json',
 					data: {
@@ -193,6 +198,8 @@
 					success: function(obj){
 						if(obj.result == 'YES'){
 							$('#img_' + sno).remove();
+						} else if(obj.result == 'REDIRECT'){
+							$(location).attr('href', '/cls2/member/login.cls');
 						} else {
 							alert('*** 삭제에 실패했습니다! ***');
 						}
@@ -208,14 +215,15 @@
 </head>
 <body>
 	
-	<form method="POST" action="/cafe/board/board.cafe" id="lfrm" name="lfrm">
+	<form method="POST" action="/cls2/board/board.cls" id="lfrm" name="lfrm">
 		<input type="hidden" name="nowPage" id="nowPage" value="${param.nowPage}">
+		<input type="hidden" name="bno" value="${DATA.bno}">
 	</form>
 	
 	<div class="w3-content mxw700 w3-margin-top w3-padding">
 		<h1 class="w3-purple w3-padding w3-center w3-card-4 w3-margin-top w3-margin-bottom">게시판 글 작성</h1>
 		<!-- form 태그 -->
-		<form method="POST" action="/cafe/board/boardEditProc.cafe" name="efrm" id="efrm" encType="multipart/form-data"
+		<form method="POST" action="/cls2/board/boardEditProc.cls" name="efrm" id="efrm" encType="multipart/form-data"
 			class="w3-col w3-padding w3-margin-bottom w3-card-4">
 			
 			<input type="hidden" name="nowPage" value="${param.nowPage}">
@@ -228,13 +236,13 @@
 															placeholder="글제목 입력!" value="${DATA.title}">
 				</div>
 			</div>
-		<c:if test="${DATA.list[0].fno != 0}">
+		<c:if test="${not empty LIST}">
 			<div class="w3-col w3-margin-top pdb10 w3-border-bottom w3-border-light-grey">
 				<label class="w3-col w150 w3-center w3-text-grey ft14">첨부파일</label>
 				<div class="w3-rest pdr30">
 					<div class="w3-col w3-margin-top w3-center w3-border pdAll10" id="addImg">
 			
-			<c:forEach var="data" items="${DATA.list}">
+			<c:forEach var="data" items="${LIST}">
 			<%--
 					DATA 		<=== BoardVO
 					DATA.list 	<=== BoardVO.list
@@ -242,7 +250,7 @@
 			--%>
 						<div class="inblock box120 pdAll10 mgl10 w3-border w3-broder-grey w3-card imgFile" id="img_${data.fno}">
 							<div class="w3-col imgBox100">
-								<img class="w3-col img100" src="/cafe/img/upload/${data.savename}">
+								<img class="w3-col img100" src="/cls2/img/upload/${data.savename}">
 							</div>
 						</div>
 			</c:forEach>
@@ -254,7 +262,7 @@
 				<label class="w3-col w150 w3-center w3-text-grey ft14">파일추가</label>
 				<div class="w3-rest pdr30">
 					<div class="w3-col" id="filefr">
-						<input type="file" name="file1" id="file1" class="w3-col w3-input w3-round w3-border mgb10 file">
+						<input type="file" name="file" id="file1" class="w3-col w3-input w3-round w3-border mgb10 file">
 					</div>
 					<div class="w3-col w3-margin-top w3-center pdAll10" id="fileImg"></div>
 				</div>
@@ -270,7 +278,7 @@
 		
 		<!-- 버튼 태그 -->
 		<div class="w3-col w3-margin-top w3-card-4">
-			<div class="w3-quarter w3-green w3-hover-lime w3-button" id="hbtn">home</div>
+			<div class="w3-quarter w3-red w3-hover-pink w3-button" id="dbtn">delete</div>
 			<div class="w3-quarter w3-blue w3-hover-pink w3-button" id="bbtn">Board</div>
 			<div class="w3-quarter w3-deep-purple w3-hover-pink w3-button" id="rbtn">reset</div>
 			<div class="w3-quarter w3-orange w3-hover-red w3-button" id="sbtn">submit</div>

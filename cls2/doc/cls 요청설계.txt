@@ -227,36 +227,35 @@
 	처리함수	:	boardList()
 	뷰			:	/WEB-INF/views/board/boardList.jsp
 
-2. 게시판 글쓰기 폼보기 요청
-	요청내용	:	/cls2/board/boardWrite.cls
-	파라미터	:	무
-	컨트롤러	:	com.increpas.cls2.controller.Board
-	처리함수	:	boardWrite()
-	뷰			:	/WEB-INF/views/board/boardWrite.jsp
-	
-3. 게시판 상세보기 폼보기 요청
+2. 게시판 상세보기 폼보기 요청
 	요청내용	:	/cls2/board/boardDetail.cls
 	파라미터	:	nowPage, bno
 	컨트롤러	:	com.increpas.cls2.controller.Board
 	처리함수	:	boardDetail()
 	뷰			:	/WEB-INF/views/board/boardDetail.jsp
 	
-4. 게시글 수정 폼보기 요청
+3. 게시판 글쓰기 폼보기 요청
+	요청내용	:	/cls2/board/boardWrite.cls
+	파라미터	:	무
+	컨트롤러	:	com.increpas.cls2.controller.Board
+	처리함수	:	boardWrite()
+	뷰			:	/WEB-INF/views/board/boardWrite.jsp
+	
+4. 게시판 글등록 처리 요청
+	요청내용	:	/cls2/board/boardWriteProc.cls
+	파라미터	:	무
+	컨트롤러	:	com.increpas.cls2.controller.Board
+	처리함수	:	boardWriteProc()
+	뷰			:	
+					redirect ]
+						성공 : /cls2/board/board.cls
+						실패 : /cls2/board/boardWrite.cls
+5. 게시글 수정 폼보기 요청
 	요청내용	:	/cls2/board/boardEdit.cls
 	파라미터	:	nowPage, bno
 	컨트롤러	:	com.increpas.cls2.controller.Board
 	처리함수	:	boardEdit()
 	뷰			:	/WEB-INF/views/board/boardEdit.jsp
-	
-5. 게시글 수정 처리 요청
-	요청내용	:	/cls2/board/boardEditProc.cls
-	파라미터	:	nowPage, bno,[ title, body ], [file]
-	컨트롤러	:	com.increpas.cafe.controller.Board
-	처리함수	:	boardEditProc()
-	뷰			:	
-					redirect ]
-						성공 : /cls2/board/boardDetail.cls
-						실패 : /cls2/board/boardEdit.cls
 	
 6. 첨부파일 삭제 처리 요청
 	요청내용	:	/cls2/board/boardImgDel.cls
@@ -264,3 +263,25 @@
 	컨트롤러	:	com.increpas.cls2.controller.board.Board
 	처리함수	:	boardImgDel()
 	뷰			:	ajax ] json
+						
+7. 게시글 삭제 처리 요청
+	요청내용	:	/cls2/board/boardDel.cls
+	파라미터	:	bno, nowPage
+	컨트롤러	:	com.increpas.cls2.controller.Board
+	처리함수	:	boardDel()
+	뷰			:	
+					redirect ]
+						성공 : /cls2/board/board.cls
+						실패 : /cls2/board/boardEditDetail.cls
+	
+	
+	
+8. 게시글 수정 처리 요청
+	요청내용	:	/cls2/board/boardEditProc.cls
+	파라미터	:	nowPage, bno,[ title, body ], [file]
+	컨트롤러	:	com.increpas.cls2.controller.Board
+	처리함수	:	boardEditProc()
+	뷰			:	
+					redirect ]
+						성공 : /cls2/board/boardDetail.cls
+						실패 : /cls2/board/boardEdit.cls

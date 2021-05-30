@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bSQL">
+	
+	<!-- 총 게시글 수 조회 질의명령 -->
+	<select id="totalCnt" resultType="int">
+		SELECT
+			count(*)
+		FROM
+			board
+		WHERE
+			isshow = 'Y'
+	</select>
+	
+	<!-- 게시글 리스트 조회 질의명령 -->
+	<select id="boardList" resultType="bVO" parameterType="page">
+		SELECT
+		    bno, title, mno, id, wdate
+		FROM
+		    (
+		        SELECT
+		            ROWNUM rno, bno, title, mno, id, wdate
+		        FROM
+		            (
+		                SELECT
+		                    bno, title, mno, id, wdate
+		                FROM
+		                    member m, board b
+		                WHERE
+		                    b.isshow = 'Y'
+		                    AND bmno = mno
+		                ORDER BY
+		                    wdate DESC
+		            )
+		    )
+		WHERE
+		    rno BETWEEN #{startCont} AND #{endCont}
+	</select>
+	
+	<!-- 게시글 상세보기 질의명령 -->
+	<select id="boardDetail" resultType="bVO" parameterType="int">
+		SELECT
+		    bno, title, body, body ebody, id, wdate
+		FROM
+		    board b, member m
+		WHERE
+		    bmno = mno
+		    AND bno = #{bno}
+	</select>
+	
+	<!-- 첨부파일 조회 질의명령 -->
+	<select id="subFile" resultType="fVO" parameterType="int">
+		SELECT
+		    fno, savename
+		FROM
+		    upfile
+		WHERE
+		    fbno = #{bno}
+		    AND isshow = 'Y'
+	</select>
+	
+	<!-- 게시글 등록 질의명령 -->
+	<insert id="addBoard" parameterType="bVO">
+		<selectKey keyProperty="bno" resultType="int" order="BEFORE">
+			SELECT
+				NVL(MAX(bno) + 1, 100001)
+			FROM
+				board
+		</selectKey>
+		INSERT INTO
+		    board(bno, title, body, bmno)
+		VALUES(
+		    #{bno}, #{title}, #{body}, 
+		    (
+		        SELECT
+		            mno
+		        FROM
+		            member
+		        WHERE
+		            id = #{id}
+		    )
+		)
+	</insert>
+	
+	<!-- 파일 정보 등록 질의명령 -->
+	<insert id="addFile" parameterType="fVO">
+		<selectKey keyProperty="fno" resultType="int" order="BEFORE">
+			SELECT
+				NVL(MAX(fno) + 1, 100001)
+			FROM
+				upfile
+		</selectKey>
+		INSERT INTO
+		    upfile(fno, oriname, savename, len, dir, fbno)
+		VALUES(
+		    #{fno}, #{oriname}, #{savename}, #{len}, #{dir}, #{bno}
+		)
+	</insert>
+	
+	<!-- 첨부파일 삭제 질의명령 -->
+	<update id="delSub" parameterType="int">
+		UPDATE
+		    upfile
+		SET
+		    isshow = 'N'
+		WHERE
+		    fno = #{fno}
+	</update>
+	
+	<!-- 게시글 삭제 질의명령 -->
+	<update id="boardDel" parameterType="int">
+		UPDATE
+			board
+		SET
+			isshow = 'N'
+		WHERE
+			bno = #{bno}
+	</update>
+	
+	<!--  
+		myBatis 비교 연산자
+			
+			eq	: ==
+			neq	: !=
+	-->
+	
+
+	<!-- 게시글 수정 질의명령 -->
+	<update id="editBoard" parameterType="bVO">
+		UPDATE
+			board
+		<set>
+			<if test="title neq null">
+				title = #{title},
+			</if>
+			<if test="body neq null">
+				body = #{body},
+			</if>
+		</set>
+		WHERE
+			bno = #{bno}
+	</update>
+	
+</mapper>

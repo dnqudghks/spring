@@ -5,10 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="/cafe/css/w3.css">
-<link rel="stylesheet" type="text/css" href="/cafe/css/user.css">
-<script type="text/javascript" src="/cafe/js/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="/cafe/js/w3color.js"></script>
+<link rel="stylesheet" type="text/css" href="/cls2/css/w3.css">
+<link rel="stylesheet" type="text/css" href="/cls2/css/user.css">
+<script type="text/javascript" src="/cls2/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/cls2/js/w3color.js"></script>
 <style type="text/css">
 	label.ft14 {
 		line-height: 200%;
@@ -19,7 +19,7 @@
 	
 	$(document).ready(function(){
 		$('#hbtn').click(function(){
-			location.href = '/cafe/main.cafe';
+			location.href = '/cls2/main.cls';
 		});
 		
 		$('#lbtn').click(function(){
@@ -28,7 +28,7 @@
 		
 		$('#ebtn').click(function(){
 			if(confirm('수정작업을 진행할까요?')){
-				$('#frm').attr('action', '/cafe/board/boardEdit.cafe');
+				$('#frm').attr('action', '/cls2/board/boardEdit.cls');
 				$('#frm').submit();
 			}
 		});
@@ -38,7 +38,7 @@
 </head>
 <body>
 	
-	<form method="POST" action="/cafe/board/board.cafe" id="frm" name="frm">
+	<form method="POST" action="/cls2/board/board.cls" id="frm" name="frm">
 		<input type="hidden" name="nowPage" id="nowPage" value="${nowPage}">
 		<input type="hidden" name="bno" id="bno" value="${DATA.bno}">
 	</form>
@@ -75,7 +75,7 @@
 			<c:forEach var="data" items="${LIST}">
 						<div class="inblock box120 pdAll10 mgl10 w3-border w3-broder-grey w3-card">
 							<div class="w3-col imgBox100">
-								<img class="w3-col img100" src="/cafe/img/upload/${data.savename}">
+								<img class="w3-col img100" src="/cls2/img/upload/${data.savename}">
 							</div>
 						</div>
 			</c:forEach>
@@ -85,7 +85,7 @@
 			<div class="w3-col w3-margin-top w3-margin-bottom pdb10 w3-border-bottom w3-border-light-grey">
 				<label class="w3-col w150 w3-center w3-text-grey ft14">글내용</label>
 				<div class="w3-rest pdr30">
-					<div class="w3-col w3-contatiner w3-input w3-round w3-border">${DATA.body}</div>
+					<div class="w3-col w3-contatiner w3-input w3-round w3-border">${DATA.ebody}</div>
 				</div>
 			</div>
 		</div>

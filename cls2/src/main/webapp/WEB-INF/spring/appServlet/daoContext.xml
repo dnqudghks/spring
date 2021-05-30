@@ -10,6 +10,7 @@
 						https://www.springframework.org/schema/context/spring-context.xsd">
 
 	<bean id="mDao" class="com.increpas.cls2.dao.MemberDao" />
+	<bean id="bDao" class="com.increpas.cls2.dao.BoardDao" />
 	<bean id="gDao" class="com.increpas.cls2.dao.GBoardDao" />
 	<bean id="reDao" class="com.increpas.cls2.dao.ReBoardDao" />
 </beans>
