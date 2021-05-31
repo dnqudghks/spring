@@ -4,6 +4,8 @@ import java.util.*;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
@@ -11,22 +13,24 @@ import org.springframework.web.servlet.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.increpas.cls2.dao.*;
+import com.increpas.cls2.service.*;
 import com.increpas.cls2.vo.*;
+import com.increpas.home.HomeController;
 import com.increpas.cls2.util.*;
 
 /**
  * 	이 클래스는 게시판 관련 요청 처리 컨트롤러 클래스
- * @author	전은석
+ * @author	우병환
  * @since	2021.05.18
  * @version	v.1.0
  * @see
  * 			작업이력 ]
  * 				2021.05.18 
- * 					- 담당자 	: 전은석
+ * 					- 담당자 	: 우병환
  * 					- 작업내용 	: 클래스 제작
  * 
  * 				2021.05.27
- * 					- 담당자	: 전은석
+ * 					- 담당자	: 우병환
  * 					- 작업내용 	: 게시판 리스트보기 기능 구현
  *
  */
@@ -38,6 +42,10 @@ public class Board {
 	BoardDao bDao;
 	@Autowired
 	FileUtil fUtil;
+	@Autowired
+	BoardService bSrvc;
+	
+	private static final Logger log1 = LoggerFactory.getLogger(Board.class);
 	
 	/*
 	 * 게시글 리스트 보기 요청 처리함수
@@ -123,6 +131,8 @@ public class Board {
 		}
 		// 2. 작성자 회원번호 꺼내오고 ==> 서브질의로 처리하기로 한다.
 		// 3. 게시글 데이터베이스 작업
+		
+		/*
 		int cnt = bDao.addBoard(bVO);
 		// 4. 첨부파일 작업하고
 		ArrayList<FileVO> list = null;
@@ -148,7 +158,14 @@ public class Board {
 		} else {
 			rv.setUrl("/cls2/board/boardWrite.cls");
 		}
-		
+		*/
+		try{
+			bSrvc.insertBoard(bVO, rv);
+			log1.info("*** " + sid + " ] 님 게시글 등록 성공 ***");
+		} catch(Exception e) {
+			log1.info("#### " + sid + " ] 님 게시글 등록 성공 ####");
+			/* System.out.println("##### 게시글 추가 실패 #####"); */
+		}
 		// 뷰 부르고
 		mv.setView(rv);
 		

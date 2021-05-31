@@ -14,7 +14,7 @@ import com.increpas.cls2.vo.FileVO;
  * @version v.1.0
  * @see
  * 			작업이력 ]
- * 				2021.05.28	- 	담당자 : 전은석
+ * 				2021.05.28	- 	담당자 : 우병환
  * 								클래스 제작
  *
  */
@@ -74,7 +74,7 @@ public class FileUtil {
 	}
 	
 	// 다중파일 업로드 처리함수
-	public ArrayList<FileVO> saveProc(MultipartFile[] file, int bno, String dir) throws Exception {
+	public ArrayList<FileVO> saveProc(MultipartFile[] file, int bno, String dir) {
 		// 파일 저장이름들을 기억할 변수
 		ArrayList<FileVO> list = new ArrayList<FileVO>();
 		
@@ -82,33 +82,35 @@ public class FileUtil {
 		String path = this.getClass().getResource("").getPath();
 		path = path.substring(0, path.indexOf("/WEB-INF")) + "/WEB-INF/resources" + dir;
 		
-		for(int i = 0 ; i < file.length ; i++) {
-			FileVO fVO = new FileVO();
-			// 파일 원본이름을 알아낸다.
-			String oriName = file[i].getOriginalFilename();
-			// 만약 뷰에서 이 태그를 비워서 전송했다면 이 작업은 건너뛰고 다음파일 작업을 해야한다.
-			if(oriName == null) {
-				continue;
+		try{
+			for(int i = 0 ; i < file.length ; i++) {
+				FileVO fVO = new FileVO();
+				// 파일 원본이름을 알아낸다.
+				String oriName = file[i].getOriginalFilename();
+				// 만약 뷰에서 이 태그를 비워서 전송했다면 이 작업은 건너뛰고 다음파일 작업을 해야한다.
+				if(oriName == null) {
+					continue;
+				}
+				
+				// 이 이름의 파일이 존재하는지 검사한다.
+				String saveName = rename(path, oriName);
+				
+				// 이제 임시로 업로드된 파일을 실제 저장 경로에 저장한다.
+				// 그리고 데이터베이스에 저장할 데이터들을 기억시킨다.
+				fVO.setOriname(oriName);
+				fVO.setSavename(saveName);
+				fVO.setLen(file[i].getSize());
+				fVO.setDir(dir);
+				fVO.setBno(bno);
+				
+				// 리스트에 파일정보를 추가해준다.
+				list.add(fVO);
+				
+				// 실제 저장경로에 저장한다.
+				File tmp = new File(path, saveName);
+				file[i].transferTo(tmp); // 실제저장 실행 함수
 			}
-			
-			// 이 이름의 파일이 존재하는지 검사한다.
-			String saveName = rename(path, oriName);
-			
-			// 이제 임시로 업로드된 파일을 실제 저장 경로에 저장한다.
-			// 그리고 데이터베이스에 저장할 데이터들을 기억시킨다.
-			fVO.setOriname(oriName);
-			fVO.setSavename(saveName);
-			fVO.setLen(file[i].getSize());
-			fVO.setDir(dir);
-			fVO.setBno(bno);
-			
-			// 리스트에 파일정보를 추가해준다.
-			list.add(fVO);
-			
-			// 실제 저장경로에 저장한다.
-			File tmp = new File(path, saveName);
-			file[i].transferTo(tmp); // 실제저장 실행 함수
-		}
+		} catch(Exception e) {}
 		
 		// 리스트 반환하고
 		return list;
