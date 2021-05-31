@@ -1,0 +1,135 @@
+
+create table surveyInfo(
+    sino NUMBER(4)
+        CONSTRAINT SRVINFO_NO_PK PRIMARY KEY,
+    title VARCHAR2(4000)
+        CONSTRAINT SRVINFO_TITLE_NN NOT NULL,
+    startDate DATE
+        CONSTRAINT SRVINFO_SDATE_NN NOT NULL,
+    endDate DATE
+        CONSTRAINT SRVINFO_EDATE_NN NOT NULL
+)
+;
+
+--설문 문항 테이블
+CREATE TABLE surveyQuest(
+    sqno NUMBER(5)
+        CONSTRAINT SRVQUEST_NO_PK PRIMARY KEY,
+    sqbody VARCHAR2(500 CHAR)
+        CONSTRAINT SRVQUEST_BODY_NN NOT NULL,
+    sq_sino NUMBER(4)
+        CONSTRAINT SRVQUEST_SINO_FK REFERENCES surveyInfo(sino)
+        CONSTRAINT SRVQUEST_SINO_NN NOT NULL,
+    exno NUMBER(1),
+    sqgroup NUMBER(5)
+        CONSTRAINT SRVQUEST_GROUP_NN NOT NULL
+)
+;
+
+CREATE TABLE survey(
+    sno NUMBER(6)
+        CONSTRAINT SRV_NO_PK PRIMARY KEY,
+    smno NUMBER(4)
+        CONSTRAINT SRV_MNO_FK REFERENCES member(mno)
+        CONSTRAINT SRV_MNO_NN NOT NULL,
+    srv_qno NUMBER(5)
+        CONSTRAINT SRV_QNO_FK REFERENCES surveyQuest(sqno)
+        CONSTRAINT SRV_QNO_NN NOT NULL,
+    adate DATE DEFAULT sysdate
+        CONSTRAINT SRV_DATE_NN NOT NULL
+);
+
+INSERT INTO
+    surveyinfo
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sino) + 1,1001)
+        FROM
+            surveyInfo
+        
+    ),
+    '2021년도 가수 인지도 조사!',
+    TO_DATE('2021/05/31', 'yyyy/MM/dd'),
+    TO_DATE('2021/06/01', 'yyyy/MM/dd')
+);
+
+INSERT INTO
+    surveyQuest(sqno, sqbody, sq_sino, sqgroup)
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '당신이 좋아하는 여자 아이돌 그룹은?', 1001,
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    )
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '트와이스', 1001, 1, 10011
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '블랙핑크', 1001, 2, 10011
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '오마이걸', 1001, 3, 10011
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '레드벨벳', 1001, 4, 10011
+);
+/*
+    위의 surveyInfo, surveyQuest 테이블을 이용해서
+    현재 진행중인 설문의 문항을 조회하는 질의명령을 작성하세요.
+    
+    위에서 꺼내온 문항에 해당하는 보기를 조회하는 질의명령을 작성하세요.
+*/
+SELECT
+    exno, sqbody
+FROM
+    surveyInfo i, surveyQuest q
+WHERE
+    q.sq_sino = i.sino
+    AND sqgroup = '10001'
+;
