@@ -260,7 +260,7 @@
 6. 첨부파일 삭제 처리 요청
 	요청내용	:	/cls2/board/boardImgDel.cls
 	파라미터	:	fno
-	컨트롤러	:	com.increpas.cls2.controller.board.Board
+	컨트롤러	:	com.increpas.cls2.controller.Board
 	처리함수	:	boardImgDel()
 	뷰			:	ajax ] json
 						
@@ -285,3 +285,29 @@
 					redirect ]
 						성공 : /cls2/board/boardDetail.cls
 						실패 : /cls2/board/boardEdit.cls
+						
+-----------------------------------------------------------------------------------
+
+# 설문조사 요청 설계
+
+1. 설문 리스트 요청
+	요청내용	:	/cls2/survey/surveyList.cls
+	파라미터	:	무
+	컨트롤러	:	com.increpas.cls2.controller.Survey
+	처리함수	:	surveyList()
+	뷰			:	/WEB-INF/views/survey/surveyList.jsp
+	
+2. 설문조사 페이지 요청
+	요청내용	:	/cls2/survey/survey.cls
+	파라미터	:	sino, title
+	컨트롤러	:	com.increpas.cls2.controller.Survey
+	처리함수	:	surveyDetail()
+	뷰			:	/WEB-INF/views/survey/survey.jsp
+	
+3. 설문 결과 페이지 요청
+	요청내용	:	/cls2/survey/surveyResult.cls
+	파라미터	:	sino, title
+	컨트롤러	:	com.increpas.cls2.controller.Survey
+	처리함수	:	surveyResult()
+	뷰			:	/WEB-INF/views/survey/surveyResult.jsp
+	

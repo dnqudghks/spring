@@ -79,10 +79,13 @@
 				url = '/cls2/gBoard/gBoardList.cls';
 				break;
 			case 'reboard':
-				url = '/cls2/reBoard/reBoardList.cls'; 
+				url = '/cls2/reBoard/reBoardList.cls';
 				break;
 			case 'board':
 				url = '/cls2/board/board.cls';
+				break;
+			case 'survey':
+				url = '/cls2/survey/surveyList.cls';
 				break;
 			}
 			
@@ -101,6 +104,19 @@
 		<div class="w3-margin-top">
 			
 			<!-- 수업 예제 링크 버튼 추가 장소 -->
+<c:if test="${not empty SID && SCOUNT != 0}">
+			<!-- 방명록 링크 버튼 추가 장소 -->
+			<div class="w3-col w3-padding w3-border-bottom w3-border-top">
+				<h4 class="w3-col s4 w3-text-grey">설문조사</h4>
+				<div class="w3-col s8">
+					<div class="w3-col w3-amber w3-button cafeMBtn" id="survey">
+						<h4>설문조사 페이지</h4>
+					</div>
+				</div>
+			</div>
+</c:if>
+			
+			<!-- 회원 관련 기능 -->
 			<div class="w3-col w3-padding w3-border-bottom">
 				<h4 class="w3-col s4 w3-text-grey">Member Request</h4>
 				<div class="w3-col s8">

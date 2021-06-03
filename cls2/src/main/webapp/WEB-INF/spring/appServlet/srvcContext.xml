@@ -10,4 +10,5 @@
 						https://www.springframework.org/schema/context/spring-context.xsd">
 
 	<bean id="bSrvc" class="com.increpas.cls2.service.BoardService" />
+	<bean id="sSrvc" class="com.increpas.cls2.service.SurveyService" />
 </beans>

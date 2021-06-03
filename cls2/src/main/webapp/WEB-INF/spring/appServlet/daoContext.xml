@@ -13,4 +13,5 @@
 	<bean id="bDao" class="com.increpas.cls2.dao.BoardDao" />
 	<bean id="gDao" class="com.increpas.cls2.dao.GBoardDao" />
 	<bean id="reDao" class="com.increpas.cls2.dao.ReBoardDao" />
+	<bean id="sDao" class="com.increpas.cls2.dao.SurveyDao" />
 </beans>

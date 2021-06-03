@@ -16,10 +16,9 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
-<!-- 		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" /> -->
+	<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
 		<property name="username" value="hello" />
-		<property name="password" value="hello" />
+		<property name="password" value="increpas" />
 		<property name="maxActive" value="8" />
 	</bean>
 	

@@ -63,6 +63,136 @@ VALUES(
         FROM
             surveyQuest
     ),
+    '당신이 좋아하는 가수 아이돌 그룹은?', 1001,
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    )
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '성시경', 1001, 1, 10001
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '빅재범', 1001, 2, 10001
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '콜드', 1001, 3, 10001
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '정바스', 1001, 4, 10001
+);
+INSERT INTO
+    surveyQuest(sqno, sqbody, sq_sino, sqgroup)
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '당신이 좋아하는 남자 아이돌 그룹은?', 1001,
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    )
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '아스트로', 1001, 1, 10006
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    'BTS', 1001, 2, 10006
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '2PM', 1001, 3, 10006
+);
+
+INSERT INTO
+    surveyQuest
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
+    '펜타곤', 1001, 4, 10006
+);
+INSERT INTO
+    surveyQuest(sqno, sqbody, sq_sino, sqgroup)
+VALUES(
+    (
+        SELECT
+            NVL(MAX(sqno) + 1, 10001)
+        FROM
+            surveyQuest
+    ),
     '당신이 좋아하는 여자 아이돌 그룹은?', 1001,
     (
         SELECT

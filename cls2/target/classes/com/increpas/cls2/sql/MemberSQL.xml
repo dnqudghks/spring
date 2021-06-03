@@ -10,26 +10,60 @@
 	그리고 이 태그의 속성으로 namespace를 줘야하는데
 	이 속성의 의미는 마이바티스에서 사용하는 질의명령 파일들을 구분해주는 용도이다.
 -->
+	<!--  
+		<sql>	: 자주 사용되는 질의명령 구문을 만들어놓고
+					사용되는 곳에
+						<include refid="아이디" />
+					태그를 사용해서 만든 질의 구문을 추가해서 사용한다.
+					
+					
+	-->
+	<sql id="mcnt">
+		SELECT
+			count(*)
+		FROM
+			member
+		WHERE
+			id = 
+	</sql>
+	
+	<sql id="minfo">
+		SELECT
+			mno, id, name, mail, tel, member.gen, ano, savename, joindate jDate, joindate jTime
+		FROM
+			member, avatar
+		WHERE
+			avt = ano
+			AND isShow = 'Y'
+	</sql>
 	<!-- 회원가입시 아이디 체크 질의 명령 -->
 	<select id="idCheck" resultType="int" parameterType="string">
+		<!--  
 		SELECT
 			count(*)
 		FROM
 			member
 		WHERE
 			id = #{sid}
+		-->
+		<include refid="mcnt" /> #{sid}
 	</select>
 	
 	<!-- 로그인 처리 질의 명령 -->
 	<select id="login" resultType="int" parameterType="mVO">
+		<!--  
 		SELECT
 			count(*)
 		FROM
 			member
 		WHERE
-			isshow = 'Y'
-			AND id = #{id}
+			id = #{id}
 			AND pw = #{pw}
+			AND isshow = 'Y'
+		-->
+		<include refid="mcnt" /> #{id}
+			AND pw = #{pw}
+			AND isshow = 'Y'
 	</select>
 	<!-- 
 		resultType		: 질의명령의 실행결과 발생하는 한행을 저장할 수 있는 데이터타입을 적습니다.
@@ -45,6 +79,7 @@
 	
 	<!-- 회원 정보 조회 질의명령 -->
 	<select id="memberIdInfo" resultType="mVO" parameterType="string">
+		<!--  
 		SELECT
 			mno, id, name, mail, tel, member.gen, ano, savename, joindate jDate, joindate jTime
 		FROM
@@ -52,9 +87,12 @@
 		WHERE
 			avt = ano
 			AND isShow = 'Y'
+		-->
+		<include refid="minfo" />
 			AND id = #{id}
 	</select>
 	<select id="memberNoInfo" resultType="mVO" parameterType="int">
+		<!--  
 		SELECT
 			mno, id, name, mail, tel, member.gen, ano, savename, joindate jDate, joindate jTime
 		FROM
@@ -62,6 +100,8 @@
 		WHERE
 			avt = ano
 			AND isShow = 'Y'
+		-->
+		<include refid="minfo" />
 			AND mno = #{mno}
 	</select>
 	
