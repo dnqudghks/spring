@@ -18,7 +18,7 @@
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 	<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
 		<property name="username" value="hello" />
-		<property name="password" value="increpas" />
+		<property name="password" value="hello" />
 		<property name="maxActive" value="8" />
 	</bean>
 	

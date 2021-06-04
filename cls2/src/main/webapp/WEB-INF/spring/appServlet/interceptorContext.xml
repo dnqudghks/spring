@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans 
+	xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+						https://www.springframework.org/schema/mvc/spring-mvc.xsd
+						http://www.springframework.org/schema/beans 
+						https://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context 
+						https://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<!--  인터셉터 클래스 bean등록 -->
+	<beans:bean id="loginCheck" class="com.increpas.cls2.interceptor.LoginCheckInterceptor"/>
+	
+	<!-- 인터셉터가 작동할 요청패턴을 설정 -->
+	<interceptors>
+		<interceptor>
+			<!--  적용패턴 전의 -->
+			<mapping path="/**/survey*.cls"/>
+			
+			<!--  적용 제외 패턴 정의 -->
+			<exclude-mapping path ="/survey/surveyList.cls"/>
+			
+			<!-- 처리할 클래스 설정 -->
+			<beans:ref bean="loginCheck"/>
+		</interceptor>
+	</interceptors>
+</beans:beans>

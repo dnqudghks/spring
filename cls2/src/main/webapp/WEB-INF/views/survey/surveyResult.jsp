@@ -60,8 +60,8 @@
 							<span class="ft10 w3-text-blue w3-right w3-display-bottomright">${sub.per} %</span>
 						</h5>
 						<div class="w3-col pdl50">
-							<div class="w3-col w3-border w3-border-grey h10 mgb20">
-								<div class="w3-col w3-blue h10" style="width: ${sub.per}%;"><p></p></div>
+							<div class="w3-col w3-border w3-border-grey h10 mgb20 line-grdnt">
+								<div class="w3-col w3-white w3-right h10" style="width: ${100 - sub.per}%;"><p></p></div>
 							</div>
 						</div>
 			</c:forEach>

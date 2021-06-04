@@ -42,6 +42,7 @@
 	<!-- 
 	<beans:bean id="mDao" class="com.increpas.cls2.dao.MemberDao" />
 	-->
+	<beans:import resource="interceptorContext.xml" />
 	<beans:import resource="daoContext.xml" />
 	<beans:import resource="utilContext.xml" />
 	<beans:import resource="srvcContext.xml" />

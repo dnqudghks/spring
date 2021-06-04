@@ -81,7 +81,7 @@ public class Member {
 			System.out.println(mVO);
 			 */
 			int cnt = mDao.getLogin(mVO);
-			
+			mVO.setCnt(cnt);
 			if(cnt == 1) {
 				session.setAttribute("SID", mVO.getId());
 			} else {
